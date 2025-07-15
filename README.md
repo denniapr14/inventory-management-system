@@ -2,6 +2,38 @@
 
 A RESTful API for inventory management built with Laravel 11 and Sanctum authentication.
 
+# Install dependencies:
+
+bash
+composer install
+npm install
+
+# Setup environment:
+bash
+cp .env.example .env
+php artisan key:generate
+Configure database in .env:
+
+# env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventory_management
+DB_USERNAME=root
+DB_PASSWORD=
+
+$ Run migrations:
+bash
+php artisan migrate
+
+# Install Sanctum:
+bash
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+Start development server:
+bash
+php artisan serve
+
 ## Features
 
 - ✅ Sanctum API Authentication
