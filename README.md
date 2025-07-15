@@ -96,9 +96,3 @@ php artisan serve
 | `/api/mutasi/{id}`     | DELETE | Delete mutation            | Yes           |
 | `/api/mutasi/history`  | GET    | Get mutation history       | Yes           |
 
-## Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/inventory-api.git
-   cd inventory-api
