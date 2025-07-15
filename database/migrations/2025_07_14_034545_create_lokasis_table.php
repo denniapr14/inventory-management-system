@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lokasis', function (Blueprint $table) {
-    $table->id();
-    $table->string('kode_lokasi')->unique();
-    $table->string('nama_lokasi');
-    $table->text('alamat')->nullable();
-    $table->string('kota');
-    $table->string('provinsi');
-    $table->string('kode_pos')->nullable();
-    $table->timestamps();
-    $table->softDeletes();
-});
+            $table->id();
+            $table->string('kode_lokasi')->unique();
+            $table->string('nama_lokasi');
+            $table->text('alamat')->nullable();
+            $table->string('kota');
+            $table->string('provinsi');
+            $table->string('kode_pos')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**

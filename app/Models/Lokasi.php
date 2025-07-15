@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Lokasi extends Model
 {
-    protected $table = 'lokasi';
+    protected $table = 'lokasis';
 
+    protected $primaryKey = 'id';
     protected $fillable = [
         'kode_lokasi',
         'nama_lokasi',
         'alamat',
-        'pic'
+        'kota',
+        'provinsi',
+        'kode_pos',
     ];
 
     public function produk(): BelongsToMany

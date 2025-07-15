@@ -16,47 +16,51 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string|min:8',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            Log::warning('Failed login attempt', ['email' => $request->email, 'ip' => $request->ip()]);
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+         try {
+            $credentials = $request->validate([
+                'email'    => 'required|email',
+                'password' => 'required|string',
             ]);
-        }
 
-        // Revoke all previous tokens (optional security measure)
-        $user->tokens()->delete();
-        Auth::login($user);
-        // Ensure the user is authenticated
-        if (!Auth::check()) {
-            Log::error('User authentication failed', ['user_id' => $user->id]);
+            if (!Auth::attempt($credentials)) {
+                return response()->json([
+                    'response_code' => 401,
+                    'status'        => 'error',
+                    'message'       => 'Unauthorized',
+                ], 401);
+            }
+
+            $user = Auth::user();
+            $token = $user->createToken('authToken')->plainTextToken;
+
             return response()->json([
-                'status' => 'error',
-                'message' => 'Authentication failed'
-            ], 401);
+                'response_code' => 200,
+                'status'        => 'success',
+                'message'       => 'Login successful',
+                'user_info'     => [
+                    'id'    => $user->id,
+                    'name'  => $user->name,
+                    'email' => $user->email,
+                ],
+                'token'       => $token,
+                'token_type'  => 'Bearer',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'response_code' => 422,
+                'status'        => 'error',
+                'message'       => 'Validation failed',
+                'errors'        => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Login Error: ' . $e->getMessage());
+
+            return response()->json([
+                'response_code' => 500,
+                'status'        => 'error',
+                'message'       => 'Login failed',
+            ], 500);
         }
-        // Create new token with abilities
-        $token = $user->createToken('api-token', ['*'])->plainTextToken;
-
-        Log::info('User logged in', ['user_id' => $user->id]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Login successful',
-            'data' => [
-                'user' => $user->only(['id', 'name', 'email']),
-                'token' => $token,
-                'token_type' => 'Bearer',
-                'expires_in' => config('sanctum.expiration') ?: null,
-                'redirect' => route('dashboard'), // Redirect URL after login
-            ]
-        ], 200);
     }
 
     public function logout(Request $request)
@@ -122,15 +126,23 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+
         try {
             $user = $request->user();
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid or missing Bearer token'
+                ], 401);
+            }
 
             return response()->json([
                 'status' => 'success',
                 'data' => [
                     'user' => $user->only(['id', 'name', 'email']),
-                    'permissions' => $user->getAllPermissions()->pluck('name'),
-                    'roles' => $user->getRoleNames()
+                    'permissions' => method_exists($user, 'getAllPermissions') ? $user->getAllPermissions()->pluck('name') : [],
+                    'roles' => method_exists($user, 'getRoleNames') ? $user->getRoleNames() : []
                 ]
             ]);
         } catch (\Exception $e) {

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Mutasi extends Model
 {
-    protected $table = 'mutasi';
+    protected $table = 'mutasis';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'tanggal',

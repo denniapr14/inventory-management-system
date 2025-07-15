@@ -21,10 +21,12 @@ class LokasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_lokasi' => 'required|string|max:255|unique:lokasi',
+            'kode_lokasi' => 'required|string|max:255',
             'nama_lokasi' => 'required|string|max:255',
             'alamat' => 'nullable|string',
-            'pic' => 'nullable|string|max:255',
+            'kota' => 'nullable|string|max:255',
+            'provinsi' => 'nullable|string|max:255',
+            'kode_pos' => 'nullable|string|max:20',
         ]);
 
         $lokasi = Lokasi::create($request->all());
@@ -49,10 +51,11 @@ class LokasiController extends Controller
     public function update(Request $request, Lokasi $lokasi)
     {
         $request->validate([
-            'kode_lokasi' => 'required|string|max:255|unique:lokasi,kode_lokasi,' . $lokasi->id,
+            'kode_lokasi' => 'required|string|max:255',
             'nama_lokasi' => 'required|string|max:255',
             'alamat' => 'nullable|string',
-            'pic' => 'nullable|string|max:255',
+           'provinsi' => 'nullable|string|max:255',
+            'kode_pos' => 'nullable|string|max:20',
         ]);
 
         $lokasi->update($request->all());

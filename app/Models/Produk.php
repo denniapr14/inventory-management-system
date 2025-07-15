@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Produk extends Model
 {
-    protected $table = 'produk';
+    protected $table = 'produks';
+
+    protected $primaryKey = 'id';
+
+
 
     protected $fillable = [
         'nama_produk',
@@ -18,7 +22,6 @@ class Produk extends Model
         'deskripsi',
         'harga'
     ];
-
     protected $casts = [
         'harga' => 'decimal:2',
     ];

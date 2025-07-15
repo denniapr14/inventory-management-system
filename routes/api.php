@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ProdukController;
 use App\Http\Controllers\Api\LokasiController;
 use App\Http\Controllers\Api\MutasiController;
 use App\Http\Controllers\Api\ProdukLokasiController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,19 @@ use App\Http\Controllers\Api\ProdukLokasiController;
 
 // Public authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/register', [AuthController::class, 'register']);
-
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 // Authenticated routes
+
+Route::get('/test-token', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
 Route::middleware('auth:sanctum')->group(function () {
+
+
+
+    Route::post('/me', [AuthController::class, 'me'])->name('me');
+    Route::get('/produk', [AuthController::class, 'produk'])->name('produk.index');
 
 
     // Authentication routes
@@ -32,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Product routes
     Route::apiResource('produk', ProdukController::class);
+
+    // Route::post('/addProduk', [ProdukController::class, 'store']);
     Route::get('produk/{produk}/mutasi', [ProdukController::class, 'mutasiHistory']);
 
     // Location routes

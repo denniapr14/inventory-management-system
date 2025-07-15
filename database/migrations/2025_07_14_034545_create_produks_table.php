@@ -19,6 +19,7 @@ return new class extends Migration
     $table->string('satuan');
     $table->text('deskripsi')->nullable();
     $table->integer('minimum_stok')->default(0);
+    $table->decimal('harga', 10, 2)->default(0.00);
     $table->timestamps();
     $table->softDeletes();
 });

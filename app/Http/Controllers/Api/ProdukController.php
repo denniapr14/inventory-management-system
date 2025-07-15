@@ -22,12 +22,13 @@ class ProdukController extends Controller
     {
         $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'kode_produk' => 'required|string|max:255|unique:produk',
+            'kode_produk' => 'required|string|max:255',
             'kategori' => 'required|string|max:255',
             'satuan' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'harga' => 'required|numeric|min:0',
         ]);
+
 
         $produk = Produk::create($request->all());
 
@@ -52,7 +53,7 @@ class ProdukController extends Controller
     {
         $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'kode_produk' => 'required|string|max:255|unique:produk,kode_produk,' . $produk->id,
+            'kode_produk' => 'required|string|max:255',
             'kategori' => 'required|string|max:255',
             'satuan' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
