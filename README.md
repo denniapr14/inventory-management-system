@@ -47,7 +47,6 @@ php artisan serve
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/YOUR_COLLECTION_ID)
 
-Full API documentation available in [HTML format](api-docs.html) or:
 
 ### Authentication
 
