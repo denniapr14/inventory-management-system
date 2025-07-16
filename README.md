@@ -8,6 +8,9 @@ bash
 composer install
 npm install
 
+# Clone File
+git clone https://github.com/denniapr14/inventory-management-system.git my-inventory-folder
+
 # Setup environment:
 bash
 cp .env.example .env
